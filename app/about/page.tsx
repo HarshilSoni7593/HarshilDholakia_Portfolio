@@ -466,7 +466,7 @@ export default function AboutPage() {
 						<div className="flex items-start gap-4">
 							<div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
 								<Image
-									src="/Conestoga_College_Logo.svg"
+									src="/Conestoga_College_Logo.png"
 									alt="Conestoga College Logo"
 									width={48}
 									height={48}
