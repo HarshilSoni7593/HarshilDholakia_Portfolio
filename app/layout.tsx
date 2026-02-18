@@ -5,32 +5,39 @@ import { ThemeProvider } from "next-themes";
 import { ThemedLayout } from "./theme-layout";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+	variable: "--font-geist-sans",
+	subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+	variable: "--font-geist-mono",
+	subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Harshil Dholakia - Full-stack Developer",
-  description: "Portfolio of a Full-Stack Developer (Next.js, TypeScript, .NET).",
+	title: "Harshil Dholakia - Full-stack Developer",
+	description:
+		"Portfolio of a Full-Stack Developer (Next.js, TypeScript, .NET).",
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
-  }) {  
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <ThemedLayout>{children}</ThemedLayout>
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+	children: React.ReactNode;
+}) {
+	return (
+		<html lang="en" suppressHydrationWarning>
+			<body
+				className={`${geistSans.variable} ${geistMono.variable}`}
+				suppressHydrationWarning>
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange>
+					<ThemedLayout>{children}</ThemedLayout>
+				</ThemeProvider>
+			</body>
+		</html>
+	);
 }
