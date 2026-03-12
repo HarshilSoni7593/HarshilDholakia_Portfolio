@@ -16,21 +16,51 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { Download, Maximize2, Minimize2, Menu, X } from "lucide-react";
-import { useState } from "react";
-import { usePathname } from "next/navigation";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+	Download,
+	Maximize2,
+	Minimize2,
+	Menu,
+	User,
+	LogOut,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
+import { label } from "motion/react-client";
 
 const nav = [
 	{ href: "/", label: "Home" },
 	{ href: "/projects", label: "Projects" },
 	{ href: "/about", label: "About" },
+	{ href: "/learn", label: "Learn With Me" },
 	{ href: "/contact", label: "Get in touch" },
 ];
 
 export function Navbar() {
 	const [isFullscreen, setIsFullscreen] = useState(false);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const [isClient, setIsClient] = useState(false);
 	const pathname = usePathname();
+	const router = useRouter();
+	const { user, isAuthenticated, logout } = useAuth();
+
+	useEffect(() => {
+		setIsClient(true);
+	}, []);
+
+	const handleLogout = () => {
+		logout();
+		router.push("/");
+	};
 
 	return (
 		<header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -105,6 +135,39 @@ export function Navbar() {
 							</div>
 						</DialogContent>
 					</Dialog>
+
+					{isAuthenticated ? (
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="ghost" size="icon">
+									<User className="h-5 w-5" />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align="end">
+								<DropdownMenuLabel>
+									{user?.firstName} {user?.lastName}
+								</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem asChild>
+									<Link href="/learn/courses/my-courses">My Courses</Link>
+								</DropdownMenuItem>
+								<DropdownMenuItem asChild>
+									<Link href="/learn/progress">Progress</Link>
+								</DropdownMenuItem>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem
+									onClick={handleLogout}
+									className="text-red-600">
+									<LogOut className="w-4 h-4 mr-2" />
+									Logout
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					) : (
+						<Button asChild>
+							<Link href="/auth/login">Login</Link>
+						</Button>
+					)}
 					<ThemeToggle />
 				</div>
 
@@ -135,6 +198,25 @@ export function Navbar() {
 										<Link href={x.href}>{x.label}</Link>
 									</Button>
 								))}
+
+								{isAuthenticated ? (
+									<>
+										<div className="px-4 py-2 text-sm text-muted-foreground">
+											{user?.firstName} {user?.lastName}
+										</div>
+										<Button
+											variant="outline"
+											className="w-full justify-start text-lg"
+											onClick={handleLogout}>
+											<LogOut className="w-4 h-4 mr-2" />
+											Logout
+										</Button>
+									</>
+								) : (
+									<Button asChild className="w-full">
+										<Link href="/login">Login</Link>
+									</Button>
+								)}
 
 								{/* Resume Button in Mobile Menu */}
 								<Dialog>
